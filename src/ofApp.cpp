@@ -3,12 +3,13 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
     ofSetVerticalSync(false);
+    ofSetFrameRate(30);
     
     //values of coordination system's rotation
     angleAroundX = -15;
     angleAroundY = 60;
     angleAroundZ = 0;
-    angleSpeedY = 0.02;
+    angleSpeedY = 0.3;
     resetNodeOrientation();
     
     //rest boid system
@@ -21,7 +22,6 @@ void ofApp::setup(){
     
     //shape of bird
     Bird::shape = ofMesh::cone(Bird::r, Bird::r*3);
-    
 }
 
 //--------------------------------------------------------------
@@ -59,9 +59,8 @@ void ofApp::draw(){
     worldNode.transformGL();
     
     //show Axis
-    ofDrawAxis(100);
-//    ofSetColor(100, 200, 100);
-//    ofNoFill();
+    ofDrawAxis(200);
+//    ofSetColor(100, 200, 100, 10);
 //    ofDrawSphere(Bird::restrictRange);
     
     //show birds
@@ -75,7 +74,7 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    setup();
 }
 
 //--------------------------------------------------------------

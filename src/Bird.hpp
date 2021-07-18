@@ -4,7 +4,7 @@ class Bird{
 public:
     Bird();
     
-    void update(const vector<Bird> & birds);
+    void update(vector<Bird> & birds);
     void move();
     void draw();
     
@@ -21,9 +21,13 @@ public:
     static float restrictRange;
 
 private:
-    float maxSpeed = 4;
-    float minSpeed = 0;
+    float maxSpeed = 6;
+    float minSpeed = 1;
     float maxFrc = 0.2;
+    
+    float sepK = 1.5;
+    float aliK = 1.0;
+    float cohK = 1.0;
     
     ofNode orientationNode;
     
