@@ -10,19 +10,20 @@ void ofApp::setup(){
     angleAroundX = -15;
     angleAroundY = 60;
     angleAroundZ = 0;
-    angleSpeedY = 0.3;
+    angleSpeedY = 0;//0.3;
     resetNodeOrientation();
     
     //rest boid system
-    Bird::restrictRange = min(ofGetWidth(), ofGetHeight()) / 3.0f; // => 250
-    int num = 700;
+    resetParameters();
+    Bird::restrictRange = min(ofGetWidth(), ofGetHeight()) /  2.0f;
+    int num = 500;
     birds.resize(num);
     for(int i=0; i<birds.size(); i++){
         birds[i] = Bird();
     }
     
     //shape of bird
-    Bird::shape = ofMesh::cone(Bird::r, Bird::r*3);
+    Bird::shape = ofMesh::cone(Bird::r, Bird::r*3, 3);
     
     //gui parameters
     gui.setup("controls");
@@ -39,6 +40,9 @@ void ofApp::setup(){
     weightControls.add(cKparam);
     gui.add(weightControls);
     
+    gui.add(resetButton.setup("reset values"));
+    
+    ////add listeners
     sRparam.addListener(this, &ofApp::sepListener);
     aRparam.addListener(this, &ofApp::aliListener);
     cRparam.addListener(this, &ofApp::cohListener);
@@ -46,6 +50,8 @@ void ofApp::setup(){
     sKparam.addListener(this, &ofApp::sepkListener);
     aKparam.addListener(this, &ofApp::alikListener);
     cKparam.addListener(this, &ofApp::cohkListener);
+    
+    resetButton.addListener(this, &ofApp::resetParameters);
 }
 
 //--------------------------------------------------------------
@@ -59,13 +65,21 @@ void ofApp::resetNodeOrientation(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    //roteting Axis
     angleAroundY = fmod(angleAroundY + angleSpeedY, 360);
     resetNodeOrientation();
     
+    //every bird use same cos value so that we do pre-compute.
+    Bird::sepCos = glm::cos(Bird::sepAng);
+    Bird::aliCos = glm::cos(Bird::aliAng);
+    Bird::cohCos = glm::cos(Bird::cohAng);
+    
+    //update velocity, not position
     for(int i=0; i<birds.size(); i++){
         birds[i].update(birds);
     }
     
+    //update position.
     for(int i=0; i<birds.size(); i++){
         birds[i].move();
     }
@@ -76,16 +90,13 @@ void ofApp::update(){
 void ofApp::draw(){
     ofBackgroundGradient(ofColor(60, 60, 60), ofColor(10, 10, 10));
     
-    ofPushMatrix();
-    ofTranslate(ofGetWidth()/2, ofGetHeight()/2, 0);
+    cam.begin();
     
     //rotate coordinate system
     worldNode.transformGL();
     
     //show Axis
     ofDrawAxis(200);
-//    ofSetColor(100, 200, 100, 10);
-//    ofDrawSphere(Bird::restrictRange);
     
     //show birds
     for(int i=0; i<birds.size(); i++){
@@ -93,9 +104,10 @@ void ofApp::draw(){
     }
     
     worldNode.restoreTransformGL();
-    ofPopMatrix();
+    cam.end();
     
     gui.draw();
+    ofDrawBitmapStringHighlight("Any key to reset position \nuse mouse to toggle camera", glm::vec3{10, 10, 10});
 }
 
 //--------------------------------------------------------------
@@ -110,6 +122,15 @@ void ofApp::sepkListener(float & v){ Bird::sepK = v; }
 void ofApp::alikListener(float & v){ Bird::aliK = v; }
 
 void ofApp::cohkListener(float & v){ Bird::cohK = v; }
+
+void ofApp::resetParameters(){
+    Bird::sepRange = sRparam = 12;
+    Bird::aliRange = aRparam = 17;
+    Bird::cohRange = cRparam = 170;
+    Bird::sepK = sKparam = 1.5;
+    Bird::aliK = aKparam = 0.5;
+    Bird::cohK = cKparam = 0.1;
+}
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){

@@ -21,27 +21,32 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
     
+    //coordination Axis will be slightly leaned by values bellow.
+    ofEasyCam cam;
     float angleAroundX;
     float angleAroundY;
     float angleAroundZ;
     float angleSpeedY;
-    
     ofNode worldNode;
     void resetNodeOrientation();
     
+    //boid
     vector<Bird> birds;
+    void resetParameters();
     
+    //GUI related parameter ----------------
     ofxPanel gui;
+    ofxButton resetButton;
     
     ofParameterGroup rangeControls;
-    ofParameter<float> sRparam = ofParameter<float>("separate", Bird::sepRange, 0, 500);
-    ofParameter<float> aRparam = ofParameter<float>("align", Bird::aliRange, 0,500);
-    ofParameter<float> cRparam = ofParameter<float>("cohesion", Bird::cohRange, 0, 500);
+    ofParameter<float> sRparam = ofParameter<float>("separate", 0, 0, 20);
+    ofParameter<float> aRparam = ofParameter<float>("align", 0, 0,200);
+    ofParameter<float> cRparam = ofParameter<float>("cohesion", 0, 0, 500);
     
     ofParameterGroup weightControls;
-    ofParameter<float> sKparam = ofParameter<float>("separate", Bird::sepK, 0, 2);
-    ofParameter<float> aKparam = ofParameter<float>("align", Bird::aliK, 0,2);
-    ofParameter<float> cKparam = ofParameter<float>("cohesion", Bird::cohK, 0, 2);
+    ofParameter<float> sKparam = ofParameter<float>("separate", 0, 0, 2);
+    ofParameter<float> aKparam = ofParameter<float>("align", 0, 0,2);
+    ofParameter<float> cKparam = ofParameter<float>("cohesion", 0, 0, 2);
     
     void sepListener(float & v);
     void aliListener(float & v);
@@ -50,5 +55,7 @@ public:
     void sepkListener(float & v);
     void alikListener(float & v);
     void cohkListener(float & v);
+    
+    //----------------
     
 };

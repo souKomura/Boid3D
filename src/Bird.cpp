@@ -23,18 +23,19 @@ void Bird::update(vector<Bird> &birds){
         if(this == &other) continue;
         
         float d = pos.distance(other.pos);
+        float dot = pos.dot(other.pos);
         
-        if(d < sepRange){
+        if(d < sepRange && dot > sepCos){
             posDiffSum += ((pos - other.pos) / d).getNormalized();
             sepCnt++;
         }
         
-        if(d < aliRange){
+        if(d < aliRange && dot > aliCos){
             velSum += other.vel;
             aliCnt++;
         }
         
-        if(d < cohRange){
+        if(d < cohRange && dot > cohCos){
             posSum += other.pos;
             cohCnt++;
         }
@@ -62,13 +63,11 @@ void Bird::update(vector<Bird> &birds){
     
     frc += sepF*sepK + aliF*aliK + cohF * cohK;
     
+    
     //3.stay in restricted Range
-    ofVec3f centre = ofVec3f(0, 0, 0); //not typo
-    ofVec3f diff = centre - pos;
-    if(diff.x * diff.x + diff.y + diff.y > restrictRange*restrictRange){
-        ofVec3f toCentreF = ((centre - pos).normalize() * maxSpeed - vel);
-        toCentreF.limit(maxFrc);
-        frc += toCentreF * 1;
+    if(pos.lengthSquared() > restrictRange*restrictRange){
+        ofVec3f toCentreF = (-pos).normalize() * maxSpeed - vel;
+        frc += toCentreF * 0.025;
     }
     
     vel += frc;
@@ -105,7 +104,7 @@ void Bird::draw(){
 void Bird::setOrientation(){
     //compute rotation to look at toward future position
     
-    glm::vec3 start = {0, -1, 0}; //front of shape
+    glm::vec3 start = {0, -1, 0}; //cone's heading vector
     glm::vec3 dest = glm::normalize(glm::vec3(vel));
     
     float cosTheta = glm::dot(start, dest);
@@ -116,7 +115,7 @@ void Bird::setOrientation(){
     float w2 = glm::sqrt((1 + cosTheta)*2);
     float sinHalfTheta  = sqrt(1 - pow(w2/2, 2));
     
-    glm::quat q(w2 * 0.5f, rotationAxis.x * sinHalfTheta, rotationAxis.y * sinHalfTheta, rotationAxis.z * sinHalfTheta);
+    glm::quat q(w2 * 0.3f, rotationAxis.x * sinHalfTheta, rotationAxis.y * sinHalfTheta, rotationAxis.z * sinHalfTheta);
     
     orientationNode.setOrientation(q);
 }

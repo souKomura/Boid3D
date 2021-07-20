@@ -4,18 +4,24 @@
 float Bird::r = 3;
 ofMesh Bird::shape;
 
-float Bird::sepRange = 12;
-float Bird::aliRange = 70;
-float Bird::cohRange = 125;
-float Bird::sepK = 0.8;
-float Bird::aliK = 0.6;
-float Bird::cohK = 0.08;
+float Bird::sepRange;
+float Bird::aliRange;
+float Bird::cohRange;
+float Bird::sepK;
+float Bird::aliK;
+float Bird::cohK;
+
+float Bird::sepAng = PI/4;
+float Bird::aliAng = PI/6;
+float Bird::cohAng = PI/4;
+
+float Bird::sepCos, Bird::aliCos, Bird::cohCos;
 
 float Bird::restrictRange;
 
 //========================================================================
 int main( ){
-	ofSetupOpenGL(768,768,OF_WINDOW);			// <-------- setup the GL context
+	ofSetupOpenGL(1000,1000,OF_WINDOW);			// <-------- setup the GL context
 
 	// this kicks off the running of my app
 	// can be OF_WINDOW or OF_FULLSCREEN

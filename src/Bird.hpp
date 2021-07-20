@@ -22,12 +22,16 @@ public:
     static float aliK;
     static float cohK;
     
+    static float sepAng, sepCos;
+    static float aliAng, aliCos;
+    static float cohAng, cohCos;
+    
     static float restrictRange;
 
 private:
-    float maxSpeed = 6;
-    float minSpeed = 1;
-    float maxFrc = 0.2;
+    float maxSpeed = 7.5;
+    float minSpeed = 1.0;
+    float maxFrc = 0.3;
     
     ofNode orientationNode;
     
