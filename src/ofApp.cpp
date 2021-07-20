@@ -16,7 +16,7 @@ void ofApp::setup(){
     //rest boid system
     resetParameters();
     Bird::restrictRange = min(ofGetWidth(), ofGetHeight()) /  2.0f;
-    int num = 500;
+    int num = 1500;
     birds.resize(num);
     for(int i=0; i<birds.size(); i++){
         birds[i] = Bird();

@@ -26,7 +26,7 @@ void Bird::update(vector<Bird> &birds){
         float dot = pos.dot(other.pos);
         
         if(d < sepRange && dot > sepCos){
-            posDiffSum += ((pos - other.pos) / d).getNormalized();
+            posDiffSum += (pos - other.pos).getNormalized() / d;
             sepCnt++;
         }
         
