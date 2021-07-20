@@ -63,12 +63,12 @@ void Bird::update(vector<Bird> &birds){
     frc += sepF*sepK + aliF*aliK + cohF * cohK;
     
     //3.stay in restricted Range
-    ofVec3f centre = ofVec3f(ofGetWidth()/2, ofGetHeight()/2, 0); //not typo
+    ofVec3f centre = ofVec3f(0, 0, 0); //not typo
     ofVec3f diff = centre - pos;
     if(diff.x * diff.x + diff.y + diff.y > restrictRange*restrictRange){
         ofVec3f toCentreF = ((centre - pos).normalize() * maxSpeed - vel);
         toCentreF.limit(maxFrc);
-        frc += toCentreF;
+        frc += toCentreF * 1;
     }
     
     vel += frc;
@@ -78,7 +78,6 @@ void Bird::update(vector<Bird> &birds){
         vel.normalize();
         vel *= minSpeed;
     }
-    setOrientation();
     
 }
 
@@ -91,6 +90,8 @@ void Bird::move(){
 void Bird::draw(){
     ofPushMatrix();
     ofTranslate(pos);
+    
+    setOrientation();
     orientationNode.transformGL();
     
     shape.draw();
@@ -126,6 +127,6 @@ ofVec3f Bird::unit(){
     float _phi = ofRandom(TWO_PI);
     float x = glm::sin(_theta) * glm::cos(_phi);
     float y = glm::sin(_theta) * glm::sin(_phi);
-    float z = glm::cos(_theta);
+    float z = glm::sin(_phi);
     return ofVec3f(x, y, z);
 }

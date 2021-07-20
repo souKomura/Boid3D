@@ -1,9 +1,9 @@
 #pragma once
 #include "ofMain.h"
 #include "Bird.hpp"
+#include "ofxGui.h"
 
 class ofApp : public ofBaseApp{
-
 public:
     void setup();
     void update();
@@ -30,4 +30,25 @@ public:
     void resetNodeOrientation();
     
     vector<Bird> birds;
+    
+    ofxPanel gui;
+    
+    ofParameterGroup rangeControls;
+    ofParameter<float> sRparam = ofParameter<float>("separate", Bird::sepRange, 0, 500);
+    ofParameter<float> aRparam = ofParameter<float>("align", Bird::aliRange, 0,500);
+    ofParameter<float> cRparam = ofParameter<float>("cohesion", Bird::cohRange, 0, 500);
+    
+    ofParameterGroup weightControls;
+    ofParameter<float> sKparam = ofParameter<float>("separate", Bird::sepK, 0, 2);
+    ofParameter<float> aKparam = ofParameter<float>("align", Bird::aliK, 0,2);
+    ofParameter<float> cKparam = ofParameter<float>("cohesion", Bird::cohK, 0, 2);
+    
+    void sepListener(float & v);
+    void aliListener(float & v);
+    void cohListener(float & v);
+    
+    void sepkListener(float & v);
+    void alikListener(float & v);
+    void cohkListener(float & v);
+    
 };

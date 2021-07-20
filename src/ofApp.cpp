@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "ofxGui.h"
 
 //--------------------------------------------------------------
 void ofApp::setup(){
@@ -13,8 +14,8 @@ void ofApp::setup(){
     resetNodeOrientation();
     
     //rest boid system
-    Bird::restrictRange = min(ofGetWidth(), ofGetHeight()) / 3.0f;
-    int num = 1000;
+    Bird::restrictRange = min(ofGetWidth(), ofGetHeight()) / 3.0f; // => 250
+    int num = 700;
     birds.resize(num);
     for(int i=0; i<birds.size(); i++){
         birds[i] = Bird();
@@ -22,6 +23,29 @@ void ofApp::setup(){
     
     //shape of bird
     Bird::shape = ofMesh::cone(Bird::r, Bird::r*3);
+    
+    //gui parameters
+    gui.setup("controls");
+    
+    rangeControls.setName("look up ranges");
+    rangeControls.add(sRparam);
+    rangeControls.add(aRparam);
+    rangeControls.add(cRparam);
+    gui.add(rangeControls);
+    
+    weightControls.setName("weight of force");
+    weightControls.add(sKparam);
+    weightControls.add(aKparam);
+    weightControls.add(cKparam);
+    gui.add(weightControls);
+    
+    sRparam.addListener(this, &ofApp::sepListener);
+    aRparam.addListener(this, &ofApp::aliListener);
+    cRparam.addListener(this, &ofApp::cohListener);
+    
+    sKparam.addListener(this, &ofApp::sepkListener);
+    aKparam.addListener(this, &ofApp::alikListener);
+    cKparam.addListener(this, &ofApp::cohkListener);
 }
 
 //--------------------------------------------------------------
@@ -70,11 +94,28 @@ void ofApp::draw(){
     
     worldNode.restoreTransformGL();
     ofPopMatrix();
+    
+    gui.draw();
 }
 
 //--------------------------------------------------------------
+void ofApp::sepListener(float &v){ Bird::sepRange = v; }
+
+void ofApp::aliListener(float &v){ Bird::aliRange = v; }
+
+void ofApp::cohListener(float &v){ Bird::cohRange = v; }
+
+void ofApp::sepkListener(float & v){ Bird::sepK = v; }
+
+void ofApp::alikListener(float & v){ Bird::aliK = v; }
+
+void ofApp::cohkListener(float & v){ Bird::cohK = v; }
+
+//--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-    setup();
+    for(int i=0; i<birds.size(); i++){
+        birds[i] = Bird();
+    }
 }
 
 //--------------------------------------------------------------

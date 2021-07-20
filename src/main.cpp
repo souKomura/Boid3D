@@ -1,12 +1,15 @@
 #include "ofMain.h"
 #include "ofApp.h"
 
-float Bird::r = 2;
+float Bird::r = 3;
 ofMesh Bird::shape;
 
-float Bird::sepRange = 20;
-float Bird::aliRange = 40;
-float Bird::cohRange = 40;
+float Bird::sepRange = 12;
+float Bird::aliRange = 70;
+float Bird::cohRange = 125;
+float Bird::sepK = 0.8;
+float Bird::aliK = 0.6;
+float Bird::cohK = 0.08;
 
 float Bird::restrictRange;
 

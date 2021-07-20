@@ -18,16 +18,16 @@ public:
     static float aliRange;// = 40;
     static float cohRange;// = 40;
     
+    static float sepK;
+    static float aliK;
+    static float cohK;
+    
     static float restrictRange;
 
 private:
     float maxSpeed = 6;
     float minSpeed = 1;
     float maxFrc = 0.2;
-    
-    float sepK = 1.5;
-    float aliK = 1.0;
-    float cohK = 1.0;
     
     ofNode orientationNode;
     
